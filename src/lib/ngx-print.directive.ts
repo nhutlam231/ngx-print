@@ -130,6 +130,7 @@ public returnStyleValues() {
         <body>
           ${printContents}
         </body>
+
         <script>
             function openPrintWindow() {
               window.print();
