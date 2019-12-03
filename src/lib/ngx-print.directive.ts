@@ -42,6 +42,14 @@ export class NgxPrintDirective {
     this.returnStyleValues();
   }
 
+  /**
+  * A delay in milliseconds to force the print dialog to wait before opened. Default: 0
+  *
+  * @memberof NgxPrintDirective
+  */
+  @Input() printDelay: number = 0;
+
+
 /**
  *
  *
@@ -129,15 +137,17 @@ public returnStyleValues() {
         </head>
         <body>
           ${printContents}
-        </body>
-
-        <script>
-            function openPrintWindow() {
-              window.print();
-              setTimeout(()=>{ window.close(); }, 0);
+          <script defer>
+            function triggerPrint(event) {
+              window.removeEventListener('load', triggerPrint, false);
+              setTimeout(() => {
+                window.print();
+                setTimeout(() => window.close(), 0);
+              }, ${this.printDelay});
             }
-            window.onload = openPrintWindow();
-        </script>
+            window.addEventListener('load', triggerPrint, false);
+          </script>
+        </body>
       </html>`);
     popupWin.document.close();
   }
